@@ -1,0 +1,35 @@
+{
+  "name": "solana-cli",
+  "version": "1.0.0",
+  "description": "CLI tool to get the timestamp of when a Solana program was first deployed",
+  "main": "dist/cli.js",
+  "bin": {
+    "solana-deploy-time": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node src/cli.ts",
+    "dev": "ts-node src/cli.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GioZaarour/Solana-CLI.git"
+  },
+  "keywords": ["solana", "cli", "blockchain"],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GioZaarour/Solana-CLI/issues"
+  },
+  "homepage": "https://github.com/GioZaarour/Solana-CLI#readme",
+  "dependencies": {
+    "@solana/web3.js": "^1.78.5",
+    "commander": "^11.0.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  }
+}
