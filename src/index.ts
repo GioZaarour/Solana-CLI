@@ -6,10 +6,10 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-const RPC_URL = process.env.HELIUS_RPC_URL;
+const RPC_URL = process.env.MAIN_RPC_URL;
 
 if (!RPC_URL) {
-    console.error('Error: HELIUS_RPC_URL environment variable is not set');
+    console.error('Error: MAIN_RPC_URL environment variable is not set');
     process.exit(1);
 }
 

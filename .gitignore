@@ -14,7 +14,10 @@ dist/
 # Logs
 *.log
 
-#Notes & Random
+# Cache
+.cache/
+
+# Notes & Random
 /Assignment_Instructions.pdf
 /notes.md
 /random-scripts/
