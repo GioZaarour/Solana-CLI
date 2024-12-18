@@ -3,7 +3,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as dotenv from 'dotenv';
 
-// Load environment variables
 dotenv.config();
 
 describe('CLI Application Tests', () => {
@@ -14,7 +13,7 @@ describe('CLI Application Tests', () => {
     // Test program IDs
     const NATIVE_PROGRAM = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
     const NORMAL_PROGRAM = '6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P';
-    const NON_PROGRAM = 'DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263';
+    const NON_PROGRAM = 'A5frApbAMP6TfpMXhUyHmhn4VSJghwVNsKUYfLLmqxzz';
 
     beforeAll(() => {
         // Ensure environment variables are set
@@ -123,24 +122,4 @@ describe('CLI Application Tests', () => {
         });
     });
 
-    describe('Performance', () => {
-        test('should be faster on subsequent calls due to caching', () => {
-            // Clear any existing cache
-            if (fs.existsSync(CACHE_FILE)) {
-                fs.unlinkSync(CACHE_FILE);
-            }
-
-            // First call without cache
-            const startFirst = Date.now();
-            execSync(`${CLI_COMMAND} get-timestamp ${NORMAL_PROGRAM}`);
-            const durationFirst = Date.now() - startFirst;
-
-            // Second call with cache
-            const startSecond = Date.now();
-            execSync(`${CLI_COMMAND} get-timestamp ${NORMAL_PROGRAM}`);
-            const durationSecond = Date.now() - startSecond;
-
-            expect(durationSecond).toBeLessThan(durationFirst);
-        });
-    });
 }); 

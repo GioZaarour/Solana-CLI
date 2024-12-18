@@ -21,5 +21,5 @@ dist/
 /Assignment_Instructions.pdf
 /notes.md
 /random-scripts/
-./test/unit
-./test/mocks
+/test/unit
+/test/mocks
