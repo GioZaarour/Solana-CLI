@@ -59,7 +59,7 @@ export class RpcService {
             // Make a simple RPC call to verify the endpoint
             const response = await connection.getSlot();
             
-            // Additional validation: ensure we got a valid slot number
+            // ensure we got a valid slot number
             if (typeof response !== 'number' || response <= 0) {
                 console.error(`Invalid response from ${endpoint.name}: Expected slot number, got ${response}`);
                 return false;
@@ -67,15 +67,7 @@ export class RpcService {
 
             return true;
         } catch (error) {
-            // Log the specific error for debugging
-            if (error instanceof Error) {
-                console.error(`Health check failed for ${endpoint.name}:`, error.message);
-                if (error.stack) {
-                    console.error('Stack:', error.stack);
-                }
-            } else {
-                console.error(`Health check failed for ${endpoint.name} with unknown error:`, error);
-            }
+            console.error(`Health check failed for ${endpoint.name}:`, error);
             return false;
         }
     }
