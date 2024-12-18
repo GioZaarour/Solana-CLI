@@ -9,13 +9,20 @@
   "scripts": {
     "build": "tsc",
     "start": "ts-node src/cli.ts",
-    "dev": "ts-node src/cli.ts"
+    "dev": "ts-node src/cli.ts",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/GioZaarour/Solana-CLI.git"
   },
-  "keywords": ["solana", "cli", "blockchain"],
+  "keywords": [
+    "solana",
+    "cli",
+    "blockchain"
+  ],
   "author": "",
   "license": "ISC",
   "bugs": {
@@ -28,7 +35,10 @@
     "dotenv": "^16.3.1"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.14",
     "@types/node": "^20.8.2",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   }
