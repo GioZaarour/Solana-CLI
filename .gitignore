@@ -7,19 +7,10 @@ node_modules/
 # Build output
 dist/
 
-# IDE files
-.vscode/
-.idea/
-
-# Logs
-*.log
-
 # Cache
 .cache/
 
 # Notes & Random
-/Assignment_Instructions.pdf
 /notes.md
-/random-scripts/
 /test/unit
 /test/mocks

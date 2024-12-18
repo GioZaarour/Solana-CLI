@@ -1,0 +1,24 @@
+# Dependencies
+node_modules
+
+# Source control
+.git
+.gitignore
+
+# Environment variables
+.env
+
+# Build output
+dist
+
+# Cache
+.cache
+
+# Documentation
+*.md
+!README.md
+
+# Notes & Random
+/notes.md
+/test/unit
+/test/mocks

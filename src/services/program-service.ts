@@ -146,7 +146,7 @@ export class ProgramService {
                     throw new Error('Account not found');
                 }
 
-                // Check if this is actually a program account
+                // Check if this is actually a program account. The owner of a custom program account is always a BPFLoader program
                 if (!this.isProgramAccount(accountInfo.value.owner.toString())) {
                     throw new Error('Not a program account. This appears to be a regular account or token.');
                 }

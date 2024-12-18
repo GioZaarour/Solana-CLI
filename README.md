@@ -1,49 +1,35 @@
-# Solana Program Deployment Timestamp CLI
+# Solana Program CLI
 
-A command-line tool to get the timestamp when a Solana program was first deployed. This tool supports both native and upgradeable programs, with features like caching and RPC fallback for reliable operation.
+A command-line tool to fetch info about Solana programs (smart contracts). Currently is capable of fetching the initial deployment transaction and timestamp of any program. Has features like caching and RPC fallback for reliablity.
 
 ## Features
 
-- Get deployment timestamp for any Solana program
-- Instant response for native Solana programs
-- Support for both native and upgradeable programs
+- Get deployment timestamp for any Solana program (Native programs or Sysvar accounts excluded)
 - Local caching system for faster subsequent queries
 - Multiple RPC endpoint support with automatic fallback
 - Verbose mode for detailed operation information
 - Cache management commands
+- Integration testing
+- Docker support
 
 ## Prerequisites
 
-- Node.js (v16 or higher)
-- npm (v8 or higher)
-- A Solana RPC endpoint (e.g., from Helius)
+- Node.js
+- npm
+- A Solana RPC endpoint URL (e.g., from Helius)
 
 ## Installation
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/solana-cli.git
-   cd solana-cli
-   ```
+### Option 1: Local Installation
 
-2. Install dependencies:
+1. Install dependencies:
    ```bash
    npm install
    ```
 
-3. Create a `.env` file from the template:
-   ```bash
-   cp .env.example .env
-   ```
+2. Create a `.env` file from the template and configure your RPC endpoint(s)
 
-4. Configure your RPC endpoint in `.env`:
-   ```
-   MAIN_RPC_URL=https://your-rpc-endpoint
-   BACKUP_RPC_URLS=https://backup1,https://backup2
-   BACKUP_RPC_NAMES=Backup1,Backup2
-   ```
-
-5. Build the project:
+3. Build the project:
    ```bash
    npm run build
    ```
@@ -53,7 +39,34 @@ A command-line tool to get the timestamp when a Solana program was first deploye
    npm install -g .
    ```
 
-## Usage
+### Option 2: Docker Installation
+
+1. Create a `.env` file from the template and configure your RPC endpoint(s)
+
+3. Build the Docker image:
+   ```bash
+   docker build -t solana-deploy-time .
+   ```
+
+4. Run the container and start an interactive shell:
+
+    ```bash
+    # Start interactive shell (container will be removed when you exit)
+    docker run -it --env-file .env solana-deploy-time
+
+    # Once inside the container, you can run commands:
+    solana-deploy-time --help
+    solana-deploy-time get-timestamp <program-id>
+    solana-deploy-time cache-stats
+
+    # To exit the container (this will also remove it)
+    exit
+    ```
+
+    Note: 
+    - The cache persists within the container. If you need to clear the cache between runs, use the clear-cache command.
+
+## Usage/Commands
 
 ### Basic Commands
 
@@ -79,24 +92,20 @@ Clear the cache:
 solana-deploy-time clear-cache
 ```
 
-### Examples
+## Testing
 
-1. Check a native program:
+The project includes an application test that verifies the CLI functionality:
 ```bash
-solana-deploy-time get-timestamp TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA
+npm test
 ```
 
-2. Check a deployed program:
-```bash
-solana-deploy-time get-timestamp 6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P
-```
+This test covers:
+- Program detection (native and deployed programs)
+- Cache operations (creation, clearing, stats)
+- Error handling (invalid inputs, RPC errors)
 
-3. Check with verbose output:
-```bash
-solana-deploy-time get-timestamp 6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P -v
-```
 
-## System Architecture
+## Code Architecture
 
 ### Core Components
 
@@ -106,9 +115,9 @@ solana-deploy-time get-timestamp 6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P -v
    - Manages command routing and execution
 
 2. **Program Service** (`src/services/program-service.ts`)
-   - Core logic for program detection and analysis
-   - Handles native program identification
-   - Manages program deployment detection logic
+   - Core logic for program (smart contract) identification and RPC calls
+   - Sifts through transactions of a program's Program Executable Data Account to identify the deployment transaction
+   - Differentiates between non-programs, Native Programs or Sysvar Accounts, and custom programs (the ones users are interested in)
    - Coordinates between RPC and cache services
 
 3. **RPC Service** (`src/services/rpc-service.ts`)
@@ -124,58 +133,20 @@ solana-deploy-time get-timestamp 6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P -v
 ### Key Features Implementation
 
 1. **Program Type Detection**
-   - Maintains a list of known native programs
-   - Identifies upgradeable programs through account data
-   - Handles program data account resolution
+   - Maintains a list of known native programs and sysvar accounts
+   - Identifies custom programs and the addresses of their `Program Executable Data Account` through the account data (see [Solana Account Model](https://solana.com/docs/core/accounts))
 
 2. **Deployment Detection**
-   - Analyzes transaction history
+   - Analyzes transaction history of the `Program Executable Data Account`
    - Identifies deployment transactions through log messages
-   - Handles both native and upgradeable program cases
+   - Handles all inputs (non-programs, native programs, custom programs)
 
 3. **RPC Management**
    - Primary and backup RPC endpoint support
    - Automatic health checks
-   - Round-robin endpoint selection
    - Graceful error handling
 
 4. **Caching System**
    - JSON-based local cache
    - 24-hour cache validity
-   - Automatic cache cleanup
    - Cache statistics tracking
-
-## Testing
-
-The project includes an application test that verifies the CLI functionality:
-```bash
-npm test
-```
-
-This test covers:
-- Basic CLI functionality (help, version)
-- Program detection (native and deployed programs)
-- Cache operations (creation, clearing, stats)
-- Error handling (invalid inputs, RPC errors)
-- Performance (caching benefits)
-
-## Error Handling
-
-The tool handles various error cases:
-- Invalid program IDs
-- Non-program accounts
-- RPC connection failures
-- Missing environment variables
-- Cache read/write errors
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
-
-## License
-
-This project is licensed under the ISC License. 
